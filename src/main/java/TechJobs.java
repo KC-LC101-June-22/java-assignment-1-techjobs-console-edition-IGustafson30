@@ -52,21 +52,23 @@ public class TechJobs {
                     }
                 }
 
-            } else { // choice is "search"
+            } else { // choice is "search" <-- if searching, user will be inputting info
 
                 // How does the user want to search (e.g. by skill or employer)
                 String searchField = getUserSelection("Search by:", columnChoices);
 
                 // What is their search term?
                 System.out.println("\nSearch term:");
-                String searchTerm = in.nextLine();
+                String searchTerm = in.nextLine(); //searchTerm is what holds user's input/choice
+
+
 
                 if (searchField.equals("all")) {
-                    printJobs(JobData.findByValue(searchTerm));
-                } else {
-                    printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
-                }
-            }
+                    printJobs(JobData.findByValue(searchTerm.toLowerCase())); //needed to add .toLowerCase() to get this to pass the caseInsensitiveSearch test
+                } else { //Instructions said I would have to call findByValue somewhere, but it's already here and tests pass. So it seems like this is correct.
+                    printJobs(JobData.findByColumnAndValue(searchField, searchTerm.toLowerCase()));
+                } //^^^ Added toLowerCase() above to both searchTerms. This is where the user types what they want to search by
+            }         // so it seems to make sense set these to lower case and then update the respective methods with lowercase as well.
         }
     }
 
@@ -120,6 +122,20 @@ public class TechJobs {
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
 
-        System.out.println("printJobs is not implemented yet");
+        if(someJobs.isEmpty()){
+            System.out.print("No Results");
+        }
+        for(int i = 0; i < someJobs.size(); i++){
+            System.out.println("\n*****");
+
+            for(Map.Entry<String, String> entry : someJobs.get(i).entrySet()){
+                String key = entry.getKey();
+                String value = entry.getValue();
+
+                System.out.println(key +": "+ value);
+            }
+            System.out.println("*****");
+        }
+
     }
 }
